@@ -1,3 +1,5 @@
+import 'package:dr_shoaib_todo_firebase_app/screens/forgot_password_screen.dart';
+import 'package:dr_shoaib_todo_firebase_app/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -59,12 +61,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const Gap(16),
             
-            TextButton(onPressed: (){}, child: const Text('Not Registered Yet? Sign up')),
+            TextButton(onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                return const SignUpScreen();
+              }));
+            }, child: const Text('Not Registered Yet? Sign up')),
 
 
             const Gap(16),
 
-            TextButton(onPressed: (){}, child: const Text('Forgot Password')),
+            TextButton(onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                return const ForgotPasswordScreen();
+              }));
+
+            }, child: const Text('Forgot Password')),
           ],
         ),
       ),
