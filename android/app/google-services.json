@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "287194195105",
+    "project_id": "tododrshoaib",
+    "storage_bucket": "tododrshoaib.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287194195105:android:3da5f0e1e2b1f9d5cebce0",
+        "android_client_info": {
+          "package_name": "pk.intellilogics.dr_shoaib_todo_firebase_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpaYZezk_JBSAvODn8Fklkzk7qyOwfsqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

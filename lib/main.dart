@@ -1,7 +1,19 @@
 import 'package:dr_shoaib_todo_firebase_app/screens/login_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(apiKey: 'AIzaSyCpaYZezk_JBSAvODn8Fklkzk7qyOwfsqE',
+        appId: '1:287194195105:android:3da5f0e1e2b1f9d5cebce0',
+        messagingSenderId: '287194195105',
+        projectId: 'tododrshoaib',
+        storageBucket: 'tododrshoaib.appspot.com'
+      )
+  );
+
+
   runApp(const MyApp());
 }
 
