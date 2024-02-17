@@ -1,4 +1,7 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dr_shoaib_todo_firebase_app/screens/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -84,24 +87,78 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
             const Gap(16),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Register'),
-            ),
-            const Gap(16),
-
             CupertinoSegmentedControl(
                 groupValue: selectedGender,
                 children: const {
-              'Male': Text('Male'),
-              'Female': Text('Female'),
-              'Other': Text('Other')
-            }, onValueChanged: (newValue){
-                setState(() {
-                  selectedGender = newValue;
-                });
-            }),
+                  'Male': Text('Male'),
+                  'Female': Text('Female'),
+                  'Other': Text('Other')
+                },
+                onValueChanged: (newValue) {
+                  setState(() {
+                    selectedGender = newValue;
+                  });
+                }),
+            const Gap(16),
+            ElevatedButton(
+              onPressed: () async {
+                String name = nameC.text.trim();
 
+                if (name.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please provide name')));
+                  return;
+                }
+
+                String mobile = mobileC.text.trim();
+                String email = emailC.text.trim();
+                String pass = passC.text.trim();
+                String confirmPass = confirmC.text.trim();
+
+                if (pass != confirmPass) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Passwords must match')));
+                  return;
+                }
+
+                // if everything is OK
+
+                FirebaseAuth auth = FirebaseAuth.instance;
+
+                try {
+                  UserCredential userCredential =
+                      await auth.createUserWithEmailAndPassword(
+                          email: email, password: pass);
+
+                  if (userCredential.user != null) {
+                    // Now store other info to database
+                    String uid = userCredential.user!.uid;
+
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(uid)
+                        .set({
+                      'uid': uid,
+                      'name': name,
+                      'mobile': mobile,
+                      'email': email,
+                      'gender': selectedGender,
+                      'photo': null,
+                      'createdOn':
+                          DateTime.now().millisecondsSinceEpoch, // timestamp
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Account Created')));
+                  }
+                } on FirebaseAuthException catch (e) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(e.message!)));
+                }
+              },
+              child: const Text('Register'),
+            ),
+            const Gap(16),
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
