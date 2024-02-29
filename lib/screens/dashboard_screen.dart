@@ -3,6 +3,8 @@ import 'package:dr_shoaib_todo_firebase_app/screens/add_task_screen.dart';
 import 'package:dr_shoaib_todo_firebase_app/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -84,20 +86,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 
             var listOfTasks = snapshot.data!.docs;
-            return ListView.builder(
-                itemCount: listOfTasks.length,
-                itemBuilder: (context, index){
-              return Card(child: ListTile(
-                title: Text(listOfTasks[index]['title']),
-                subtitle: Text(listOfTasks[index]['createdOn'].toString()),
-                
-                trailing: SizedBox(width: 100, child: Row(children: [
-                  IconButton(onPressed: (){}, icon: Icon(Icons.delete)),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                  itemCount: listOfTasks.length,
+                  itemBuilder: (context, index){
+                return Card(child: ListTile(
+                  title: Text(listOfTasks[index]['title']),
+                  subtitle: Text(getHumanReadableDate(listOfTasks[index]['createdOn'])),
 
-                ],),),
-              ),);
-            });
+
+                  trailing: SizedBox(width: 100, child: Row(children: [
+                    IconButton(onPressed: (){
+                      showDialog(context: context, builder: (context){
+                        return AlertDialog(title: const Text('Confirmation'),
+                        content: const Text('Are you sure to delete ?'),
+                          actions: [
+                            TextButton(onPressed: (){
+                              Navigator.of(context).pop();
+                            }, child: const Text('No')),
+                            TextButton(onPressed: () async{
+                              Navigator.of(context).pop();
+
+                              await tasksRef!.doc(listOfTasks[index]['taskId']).delete();
+                              Fluttertoast.showToast(msg: 'Take Deleted');
+                            }, child: const Text('Yes')),
+
+                          ],
+                        );
+                      });
+                    }, icon: Icon(Icons.delete)),
+                    IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+
+                  ],),),
+                ),);
+              }),
+            );
 
           }else{
             return const CircularProgressIndicator();
@@ -105,5 +129,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
       ),
     );
+  }
+
+  String getHumanReadableDate( int timestamp ){
+
+    DateFormat dateFormat = DateFormat('dd-MMM-yy HH:mm');
+    
+    return dateFormat.format(DateTime.fromMillisecondsSinceEpoch(timestamp));
+
   }
 }
