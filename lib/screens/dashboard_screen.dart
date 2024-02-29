@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dr_shoaib_todo_firebase_app/screens/add_task_screen.dart';
 import 'package:dr_shoaib_todo_firebase_app/screens/login_screen.dart';
+import 'package:dr_shoaib_todo_firebase_app/screens/update_task_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -115,8 +116,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ],
                         );
                       });
-                    }, icon: Icon(Icons.delete)),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+                    }, icon: const Icon(Icons.delete)),
+                    IconButton(onPressed: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                        return UpdateTaskScreen(taskSnapshot: listOfTasks[index]);
+                      }));
+
+                    }, icon: const Icon(Icons.edit)),
 
                   ],),),
                 ),);
