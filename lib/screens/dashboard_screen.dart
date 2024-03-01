@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dr_shoaib_todo_firebase_app/screens/add_task_screen.dart';
 import 'package:dr_shoaib_todo_firebase_app/screens/login_screen.dart';
+import 'package:dr_shoaib_todo_firebase_app/screens/profile_screen.dart';
 import 'package:dr_shoaib_todo_firebase_app/screens/update_task_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         actions: [
           IconButton(onPressed: (){
 
+            Navigator.of(context).push(MaterialPageRoute(builder: (context){
+              return const ProfileScreen();
+            }));
           }, icon: const Icon(Icons.person)),
           IconButton(onPressed: (){
             showDialog(context: context, builder: (context){
